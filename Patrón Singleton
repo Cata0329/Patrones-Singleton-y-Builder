@@ -1,0 +1,67 @@
+using System;
+
+public class Logger
+{
+    // Atributo privado y estático para almacenar la única instancia.
+    private static Logger instancia;
+
+    // Constructor privado para evitar la creación de instancias fuera de la clase.
+    private Logger() { }
+
+    // Método público y estático para obtener la única instancia.
+    public static Logger ObtenerInstancia()
+    {
+        // Si la instancia aún no ha sido creada, se crea en este momento.
+        if (instancia == null)
+        {
+            instancia = new Logger();
+        }
+        return instancia;
+    }
+
+    // Métodos para registrar eventos de diferentes niveles.
+    public void RegistrarInfo(string mensaje)
+    {
+        Console.WriteLine($"INFO: {mensaje}");
+    }
+
+    public void RegistrarAdvertencia(string mensaje)
+    {
+        Console.WriteLine($"ADVERTENCIA: {mensaje}");
+    }
+
+    public void RegistrarError(string mensaje)
+    {
+        Console.WriteLine($"ERROR: {mensaje}");
+    }
+}
+
+class Programa
+{
+    static void Main(string[] args)
+    {
+        // Obtener la instancia del logger.
+        Logger logger = Logger.ObtenerInstancia();
+
+        // Registrar eventos en diferentes partes de la aplicación.
+        logger.RegistrarInfo("Aplicación iniciada correctamente.");
+        logger.RegistrarAdvertencia("Uso de memoria alto detectado.");
+        logger.RegistrarError("Error de conexión a la base de datos.");
+
+        // Simulamos otras partes de la aplicación que también usan el logger.
+        SimularComponente1();
+        SimularComponente2();
+    }
+
+    static void SimularComponente1()
+    {
+        Logger logger = Logger.ObtenerInstancia();
+        logger.RegistrarInfo("Componente 1: Operación completada.");
+    }
+
+    static void SimularComponente2()
+    {
+        Logger logger = Logger.ObtenerInstancia();
+        logger.RegistrarError("Componente 2: Error en la operación.");
+    }
+}

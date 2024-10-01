@@ -1,0 +1,197 @@
+using System;
+using System.Text;
+
+// Clase Producto (CV)
+public class CV
+{
+    public string InformacionPersonal { get; set; }
+    public string ExperienciaLaboral { get; set; }
+    public string Educacion { get; set; }
+    public string Habilidades { get; set; }
+    public string Proyectos { get; set; }
+    public string Referencias { get; set; }
+
+    // Método para mostrar el CV en formato texto.
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("=== CV ===");
+        if (!string.IsNullOrEmpty(InformacionPersonal)) sb.AppendLine($"Información Personal: {InformacionPersonal}");
+        if (!string.IsNullOrEmpty(ExperienciaLaboral)) sb.AppendLine($"Experiencia Laboral: {ExperienciaLaboral}");
+        if (!string.IsNullOrEmpty(Educacion)) sb.AppendLine($"Educación: {Educacion}");
+        if (!string.IsNullOrEmpty(Habilidades)) sb.AppendLine($"Habilidades: {Habilidades}");
+        if (!string.IsNullOrEmpty(Proyectos)) sb.AppendLine($"Proyectos: {Proyectos}");
+        if (!string.IsNullOrEmpty(Referencias)) sb.AppendLine($"Referencias: {Referencias}");
+        return sb.ToString();
+    }
+}
+
+// Interfaz Builder (ICVBuilder)
+public interface ICVBuilder
+{
+    ICVBuilder SetInformacionPersonal(string info);
+    ICVBuilder AddExperienciaLaboral(string exp);
+    ICVBuilder AddEducacion(string edu);
+    ICVBuilder AddHabilidades(string habs);
+    ICVBuilder AddProyectos(string proy);
+    ICVBuilder AddReferencias(string referencias); // Cambio aquí
+    CV Build();
+}
+
+// Constructor Concreto para CV Cronológico
+public class CVBuilderCronologico : ICVBuilder
+{
+    private CV cv = new CV();
+
+    public ICVBuilder SetInformacionPersonal(string info)
+    {
+        cv.InformacionPersonal = info;
+        return this;
+    }
+
+    public ICVBuilder AddExperienciaLaboral(string exp)
+    {
+        cv.ExperienciaLaboral = exp;
+        return this;
+    }
+
+    public ICVBuilder AddEducacion(string edu)
+    {
+        cv.Educacion = edu;
+        return this;
+    }
+
+    public ICVBuilder AddHabilidades(string habs)
+    {
+        cv.Habilidades = habs;
+        return this;
+    }
+
+    public ICVBuilder AddProyectos(string proy)
+    {
+        cv.Proyectos = proy;
+        return this;
+    }
+
+    public ICVBuilder AddReferencias(string referencias) // Cambio aquí
+    {
+        cv.Referencias = referencias;
+        return this;
+    }
+
+    public CV Build()
+    {
+        return cv;
+    }
+}
+
+// Constructor Concreto para CV Funcional
+public class CVBuilderFuncional : ICVBuilder
+{
+    private CV cv = new CV();
+
+    public ICVBuilder SetInformacionPersonal(string info)
+    {
+        cv.InformacionPersonal = info;
+        return this;
+    }
+
+    public ICVBuilder AddExperienciaLaboral(string exp)
+    {
+        cv.ExperienciaLaboral = exp;
+        return this;
+    }
+
+    public ICVBuilder AddEducacion(string edu)
+    {
+        cv.Educacion = edu;
+        return this;
+    }
+
+    public ICVBuilder AddHabilidades(string habs)
+    {
+        cv.Habilidades = habs;
+        return this;
+    }
+
+    public ICVBuilder AddProyectos(string proy)
+    {
+        cv.Proyectos = proy;
+        return this;
+    }
+
+    public ICVBuilder AddReferencias(string referencias) // Cambio aquí
+    {
+        cv.Referencias = referencias;
+        return this;
+    }
+
+    public CV Build()
+    {
+        return cv;
+    }
+}
+
+// Clase Director (GeneradorCV)
+public class GeneradorCV
+{
+    private ICVBuilder builder;
+
+    // Método para seleccionar el tipo de CVBuilder
+    public void SetBuilder(ICVBuilder builder)
+    {
+        this.builder = builder;
+    }
+
+    // Método para construir el CV paso a paso.
+    public CV ConstruirCV(string info, string exp, string edu, string habs, string proy, string referencias)
+    {
+        return builder
+            .SetInformacionPersonal(info)
+            .AddExperienciaLaboral(exp)
+            .AddEducacion(edu)
+            .AddHabilidades(habs)
+            .AddProyectos(proy)
+            .AddReferencias(referencias) // Cambio aquí
+            .Build();
+    }
+}
+
+// Clase Programa para ejecutar el ejemplo
+class Programa
+{
+    static void Main(string[] args)
+    {
+        GeneradorCV generador = new GeneradorCV();
+
+        // Crear un CV cronológico
+        ICVBuilder builderCronologico = new CVBuilderCronologico();
+        generador.SetBuilder(builderCronologico);
+
+        CV cvCronologico = generador.ConstruirCV(
+            "Juan Pérez, 12345678", 
+            "Desarrollador de software en Empresa X", 
+            "Licenciado en Informática", 
+            "C#, SQL, HTML", 
+            "Proyecto App Web", 
+            "Referencia: Maria González" // Cambio aquí
+        );
+
+        Console.WriteLine(cvCronologico.ToString());
+
+        // Crear un CV funcional
+        ICVBuilder builderFuncional = new CVBuilderFuncional();
+        generador.SetBuilder(builderFuncional);
+
+        CV cvFuncional = generador.ConstruirCV(
+            "Ana Martínez, 87654321",
+            "Gestión de proyectos en Empresa Y",
+            "MBA",
+            "Gestión de equipos, Scrum",
+            "Proyecto de mejora de procesos",
+            "Referencia: Pedro López" // Cambio aquí
+        );
+
+        Console.WriteLine(cvFuncional.ToString());
+    }
+}
